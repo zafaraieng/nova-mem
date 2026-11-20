@@ -149,13 +149,24 @@ See [CITATION.cff](CITATION.cff). Individual author identifiers and a DOI
 are not supplied because they have not been verified. Cite the LongMemEval
 benchmark separately when using that benchmark.
 
-## Project licensing
+## Project licensing and ownership
 
-No repository-wide license is granted for NOVA-Mem project code in this release.
-A root-level license is intentionally omitted until the project copyright
-holder and the authority to grant redistribution permissions are confirmed.
-Do not assume that public availability grants permission to reuse, modify, or
-redistribute NOVA-Mem code. Third-party files retain their own notices; see
+No repository-wide license is granted for NOVA-Mem project code in this
+release. A root-level `LICENSE` is intentionally absent: copyright ownership,
+the authority to grant reuse permissions, and any third-party contributions
+to the original project code have not been independently established.
+
+The public Git history currently attributes the four recorded commits to the
+repository owner's GitHub account. That records the committer/author identity
+in Git metadata; it does **not** prove sole copyright ownership, establish
+employment or contract IP rights, or rule out contributions made outside the
+visible history. Before selecting a project license, the owner should confirm
+the provenance of all project-owned files, contributor permissions, and any
+applicable institutional or contractual obligations.
+
+Until that review is completed, do not assume that public availability grants
+permission to reuse, modify, or redistribute NOVA-Mem project code. The
+LongMemEval MIT license applies only to the separately attributed upstream
+reference material; it does not license the rest of this repository. See
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
-`third_party/longmemeval_official/LICENSE` for the separately licensed
-LongMemEval upstream reference code.
+`third_party/longmemeval_official/LICENSE`.
