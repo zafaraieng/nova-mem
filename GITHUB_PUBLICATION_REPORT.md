@@ -1,151 +1,145 @@
-# NOVA-Mem GitHub publication report
+# NOVA-Mem — Post-Publication Presentation and Repository Audit
 
 **Audit date:** 2026-11-20  
-**Publication status:** PARTIAL  
 **Repository:** https://github.com/zafaraieng/nova-mem  
 **Default branch:** `main`  
-**Source-tree publication commit:** `ba923ed0994a4ba0dd15e2d0d727e8646f186ab2`
+**Presentation commit:** `a2c20fb5ef54d0f66b8472d797cd683cff9dd1f9`  
+**Final CI workflow restoration commit:** `3d299866808f7a294cba5468a9e94589a81da375`  
+**Publication status:** PARTIAL — repository presentation and hosted software CI are verified; GitHub About metadata and project-level licensing still require owner action.
 
-## 1. Source archive and SHA-256
+## 1. Repository audit
 
-The newer source archive, selected by its later upload timestamp, was
-`nova-mem-source-release.zip`.
+The existing public repository was inspected before editing. The audit covered:
 
-```text
-SHA-256 313ef509083ad061ac4bf8f04ba0827b18759fb9302264bd8d061f046031524d
-```
+- `README.md`, `docs/RESEARCH_STATUS.md`, and `GITHUB_PUBLICATION_REPORT.md`
+- `CITATION.cff`, `THIRD_PARTY_NOTICES.md`, `pyproject.toml`, and the retained upstream LongMemEval license
+- `docs/ARCHITECTURE.md`, `docs/reproducibility.md`, and `docs/data_provenance.md`
+- Relevant implementation files for retrieval, reranking, memory systems, model clients, evaluation, scripts, tests and YAML profiles
+- The current `main` branch, commit history, recursive Git tree, repository metadata and GitHub Actions runs
 
-The other supplied archive, `nova-mem-source-release-published.zip`, had SHA-256:
+The presentation work did not rebuild the project or modify source-code modules, experiment ledgers, dataset checksums, or scientific evidence.
 
-```text
-4325b7b055642ceea436c836e9bb96fb552510b6d1715a08faa59877f8898f04
-```
+## 2. README redesign
 
-Both ZIP archives passed ZIP integrity checks and were preserved unchanged.
-The newer source ZIP supplied the source-code baseline. The older published
-ZIP contained publication metadata but omitted nine Python modules under
-`src/nova_mem/data/` and `src/nova_mem/models/`; these modules were restored
-from the newer source archive without editing their contents.
+The main README now opens with:
 
-## 2. Inputs inspected and unavailable
+> **NOVA-Mem — A Resource-Aware Evaluation Framework for Conversational Memory Strategies**
 
-Inspected:
-- `nova-mem-source-release.zip`
-- `nova-mem-source-release-published.zip`
-- Root project README, package configuration, requirements and ignore rules
-- Source tree, scripts, tests, YAML configurations and vendored LongMemEval files
-- `EXPERIMENT_STATUS.csv`
-- `paper/final_manuscript.md` (historical draft; excluded)
-- `RECONCILIATION_REPORT.md` (excluded from public release)
+Its introduction positions NOVA-Mem as research software and describes the experimental framework, evaluation pipelines, retrieval implementations, configuration management, and reproducibility documentation around cleaned LongMemEval.
 
-Not found among the supplied archives or accessible Library files:
-- a separate file named `publicationreports36`
-- `DELIVERY_REPORT_S36.md`
-- `AUTHORITATIVE_CHECKPOINT.md`
-- `RECONCILIATION_REPORT.md` as a separately supplied source file
-- `DISCREPANCIES_AND_DECISIONS.md)
+The README has 13 sections:
 
-No content was inferred from those missing files. The S-36 status in this
-release is limited to the supplied experiment-status record and values
-specified for publication.
+1. Overview
+2. Research motivation
+3. Research objectives
+4. Framework architecture
+5. Experimental methodology
+6. Implemented memory strategies
+7. Installation and usage
+8. Dataset and evaluation
+9. Experimental findings
+10. Current research snapshot
+11. Research roadmap
+12. Limitations and reproducibility
+13. Citation and acknowledgements
 
-## 3. Files added, modified, restored and excluded
+The opening no longer leads with a negative research-status label. The software capabilities appear before the experimental snapshot. The README still makes clear that code availability is distinct from experiment execution and that hosted CI does not establish scientific completion.
 
-The GitHub source commit adds the 81 non-README files from the prepared,
-privacy-filtered source tree. The preceding initial commit adds the project
-README. The resulting remote tree has 82 files.
+### Capabilities verified against the source
 
-Key public additions/updates include:
-- Project `README.md` with overview, research motivation, architecture,
-  installation, use, tests, limitations, attribution and citation guidance.
-- `docs/RESEARCH_STATUS.md` with the S-36 status and backend deviation.
-- `CITATION.cff`, `THIRD_PARTY_NOTICES.md`, `.gitignore`, and
-  `.github/workflows/tests.yml`.
-- `docs/ARCHITECTURE.md`, `docs/data_provenance.md`,
-  `docs/reproducibility.md`, and `paper/README.md`.
-- `EXPERIMENT_STATUS.csv`, configurations, checksum sidecars, scripts,
-  source modules, tests, and retained upstream reference files.
-- Nine missing source modules restored from the newer source archive:
-  `src/nova_mem/data/*` and `src/nova_mem/models/*`.
+The README describes only code paths confirmed in the current source tree:
 
-The historical `paper/final_manuscript.md` and the stale closure figure were
-excluded. The reconciliation and internal audit reports were excluded.
-No benchmark dataset, experiment-evidence ZIP, private human-review mapping,
-unblinding material, credentials, private recovery archive, or model cache was
-uploaded.
+- A no-memory, B full-context, and Oracle evidence-only context systems
+- BM25 and dense retrieval
+- Hybrid min-max fusion and reciprocal-rank fusion
+- Cross-encoder reranking
+- Structured-memory fact extraction, evidence-linked storage, and supersession handling
+- Model clients/adapters, generation cache, QA/retrieval metrics, run ledger and analysis utilities
+- YAML configurations, data fingerprints, scripts and tests
 
-A repository-wide `LICENSE` file was **not** published. The supplied project
-metadata asserted a blanket MIT license, but the project copyright holder and
-authority to grant that license were not established by the inspected inputs.
-The unverified project-level license claim was removed from `pyproject.toml`
-and `CITATION.cff`; the README explains that NOVA-Mem project-code reuse is
-not licensed by this release. The root license remains a publication blocker.
+Hash/deterministic embedders and mock readers/rerankers are explicitly described as test/plumbing tools, not scientific evidence.
 
-## 4. Final repository structure
+### README validation
 
-The 82 tracked files are organized as follows:
+The remote `README.md` and public GitHub blob path
+[README.md](https://github.com/zafaraieng/nova-mem/blob/main/README.md)
+were fetched after commit. All 11 relative README documentation/file links were checked against the remote Git tree and resolved. The Markdown source and link targets were verified. A browser screenshot of GitHub's rendered page was not available through the connected GitHub integration, so pixel-level visual rendering was not independently inspected.
 
-```text
-.github/workflows/tests.yml
-.gitignore
-CITATION.cff
-EXPERIMENT_STATUS.csv
-README.md
-THIRD_PARTY_NOTICES.md
-configs/
-data-templates/
-docs/
-paper/README.md
-prompts/v1/README.md
-pyproject.toml
-requirements.txt
-requirements-dev.txt
-scripts/
-src/nova_mem/
-  analysis/
-  data/
-  evaluation/
-  memory/
-  metrics/
-  models/
-  reranking/
-  retrieval/
-  utils/
-tests/
-third_party/longmemeval_official/
-```
+## 3. Research-status documentation
 
-The remote Git tree was fetched recursively after publication: 82 blobs,
-105 entries including directory entries, not truncated. `.gitignore` is
-anchored to root-level downloaded-data/model directories so the Python
-packages `src/nova_mem/data` and `src/nova_mem/models` remain tracked.
+`docs/RESEARCH_STATUS.md` is now titled and introduced as the **Current Research Status (S-36 snapshot)**. Its opening explains that the page records a dated research snapshot and separates implementation availability from experimental execution.
 
-## 5. Dependency installation
+The numerical status remains unchanged:
 
-Declared runtime and test dependencies are in `requirements.txt`,
-`requirements-dev.txt`, and `pyproject.toml`; `rank-bm25>=0.2.2` is
-explicitly declared.
+| Condition | Generated | Judged | Accuracy | Status |
+|---|---:|---:|---:|---|
+| A baseline | 100/100 | 100/100 | 0.04 | scored dev-100 |
+| Oracle aligned | 100/100 | 100/100 | 0.76 | scored dev-100 |
+| C-BM25 | 100/100 | 100/100 | 0.33 | scored dev-100 |
+| C-Dense | 6/100 | 0/100 | not available | partial; unjudged |
+| C-Hybrid | 0/100 | 0/100 | not available | not started |
+| C-RRF | 0/100 | 0/100 | not available | not started |
+| D-BM25 rerank | 0/100 | 0/100 | not available | not started |
+| E-v1 | 1/1 | 1/1 | not reported | one-example cold pilot only |
+| E-v2 | 0/100 | 0/100 | not available | not started |
+| Human review | — | 0/144 labeled | not available | no labels completed |
+| Test-400 | — | — | — | locked; 2/11 gate criteria met |
 
-A clean virtual environment was created locally, but dependency installation
-could not complete: the configured package index returned no available
-distributions, beginning with `numpy>=1.26`. An editable package build
-succeeded only when dependency resolution was disabled; this is not a
-successful clean installation.
+The ZAI `glm-4-plus` deviation remains explicit. The scored dev-100 A, Oracle aligned, and C-BM25 runs used ZAI rather than the frozen Ollama/Qwen configuration. The partial C-Dense continuation also used ZAI. Those ZAI-backed results are not directly comparable to the frozen Ollama/Qwen protocol.
 
-GitHub Actions run
-[44718088502](https://github.com/zafaraieng/nova-mem/actions/runs/44718088502)
-on the source-tree commit completed successfully. GitHub reports dependency
-installation, the explicit `rank-bm25` assertion, and the full offline test
-step all succeeded. The job log records **104 passed, 5 skipped in 0.38s**.
-The skips are dataset-dependent tests because private/raw benchmark data is
-not bundled. A subsequent run
-[44718250779](https://github.com/zafaraieng/nova-mem/actions/runs/44718250779)
-was triggered by the first report commit and remained in progress at the time
-of this report update.
+The page retains the local test record (96 passed, 8 failed, 5 skipped) and clearly distinguishes hosted software CI from scientific evidence.
 
-## 6. Actual test results
+## 4. Research roadmap
 
-The complete local pytest invocation in the available interpreter reported:
+Created `docs/RESEARCH_ROADMAP.md`. It separates:
+
+- Implemented software capabilities.
+- Experiments recorded at S-36.
+- Experiments requiring execution (C-Dense continuation/judging, C-Hybrid, C-RRF, D-BM25 rerank and E-v2).
+- Validation requiring future work (human review, Test-400 gate, cross-backend comparability and model-path validation).
+
+No deadlines, completed milestones, new results, or experimental claims were invented.
+
+## 5. Citation and attribution
+
+Updated `CITATION.cff` to use the professional project title and describe the actual software capabilities. The citation instructions point to the S-36 research-status page and its backend deviation.
+
+No author, affiliation, ORCID, DOI, venue, or project license field was invented.
+
+`THIRD_PARTY_NOTICES.md` and `third_party/longmemeval_official/LICENSE` were not modified. The retained upstream MIT license and Di Wu copyright notice remain specific to the separately attributed LongMemEval reference material; they do not license all NOVA-Mem code.
+
+## 6. CI and test verification
+
+The workflow at `.github/workflows/tests.yml` uses:
+
+- `actions/checkout@v7.0.1`
+- `actions/setup-python@v7.1.0`
+
+It also sets `permissions: contents: read` and excludes report-only commits from test triggers. The v7 action lines are supported by their current official release records and use the Node 24 runtime. Sources: [checkout v7.0.1 release](https://github.com/actions/checkout/releases/tag/v7.0.1), [setup-python v7.1.0 release](https://github.com/actions/setup-python/releases/tag/v7.1.0), and [setup-python v7 documentation](https://github.com/actions/setup-python#readme).
+
+### GitHub Actions runs
+
+All seven runs returned by the repository's Actions runs endpoint were inspected. All completed successfully. Run #6 was an intermediate documentation commit that briefly carried the older v4/v5 workflow; its log shows the Node 20 deprecation warning. That workflow was restored to v7/v7 in the following commit and revalidated by run #7.
+
+| Run | Commit | Result | Pytest summary | Action versions / warning |
+|---|---|---|---|---|
+| [#1 — 44718088502](https://github.com/zafaraieng/nova-mem/actions/runs/44718088502) | `ba923ed0994a` | success | 104 passed, 5 skipped (0.38s) | checkout v4 / setup-python v5; Node 20 warning |
+| [#2 — 44718250779](https://github.com/zafaraieng/nova-mem/actions/runs/44718250779) | `ceedbcad2869` | success | 104 passed, 5 skipped (0.51s) | checkout v4 / setup-python v5; Node 20 warning |
+| [#3 — 44718460506](https://github.com/zafaraieng/nova-mem/actions/runs/44718460506) | `f8cfa56c5ea3` | success | 104 passed, 5 skipped (0.66s) | checkout v4 / setup-python v5; Node 20 warning |
+| [#4 — 44738350541](https://github.com/zafaraieng/nova-mem/actions/runs/44738350541) | `da1ff7c008e7` | success | 104 passed, 5 skipped (0.71s) | checkout v7.0.1 / setup-python v7.1.0; no Node 20 warning |
+| [#5 — 44738968047](https://github.com/zafaraieng/nova-mem/actions/runs/44738968047) | `95ddc27b405e` | success | 104 passed, 5 skipped (0.39s) | checkout v7.0.1 / setup-python v7.1.0; no Node 20 warning |
+| [#6 — 44739545340](https://github.com/zafaraieng/nova-mem/actions/runs/44739545340) | `a2c20fb5ef54` | success | 104 passed, 5 skipped (0.72s) | transient checkout v4 / setup-python v5; Node 20 warning |
+| [#7 — 44739692403](https://github.com/zafaraieng/nova-mem/actions/runs/44739692403) | `3d299866808f` | success | 104 passed, 5 skipped (0.65s) | checkout v7.0.1 / setup-python v7.1.0; no Node 20 warning |
+
+For run #7, the job log confirms successful installation of the declared dependencies, the explicit `rank-bm25` import check, and the pytest step. It ended with **104 passed, 5 skipped in 0.65s**. The log contains no Node 20 deprecation warning.
+
+### Skipped tests
+
+The five skipped tests are dataset-presence checks. They require locally acquired cleaned LongMemEval files and/or a generated split that are intentionally not bundled in the public repository. They are skipped software checks, not experimental conditions and not evidence that the benchmark evaluations were completed.
+
+### Local test result
+
+The latest recorded local invocation remains:
 
 | Result | Count |
 |---|---:|
@@ -153,90 +147,78 @@ The complete local pytest invocation in the available interpreter reported:
 | Failed | 8 |
 | Skipped | 5 |
 
-All eight failures raised `ModuleNotFoundError: rank_bm25`; that package was
-declared but absent from the provided interpreter. Five dataset-dependent
-tests skipped because benchmark data is not bundled. No tests were deleted or
-silently skipped to improve the local result.
+The eight local failures raised `ModuleNotFoundError: rank_bm25`, because that declared dependency was absent from the local interpreter. A clean local virtual environment could not install dependencies through the configured package index, starting with `numpy>=1.26`. These local results were not rerun during this presentation task and are not represented as passing.
 
-Separately, the hosted GitHub Actions run for source commit
-`ba923ed0994a4ba0dd15e2d0d727e8646f186ab2` passed with **104 passed,
-5 skipped in 0.38s** after installing dependencies including `rank-bm25`.
-The local interpreter failures reflect its incomplete dependency state, not
-the result of that clean hosted run.
+Hosted CI and local results are reported separately. A successful hosted test suite verifies the tested software paths; it does not complete NOVA-Mem's broader experimental study or replace human review.
 
-Other checks completed successfully: Python source compilation, parsing of
-the six YAML configurations, script help/import checks, CFF parsing, status
-assertions, package metadata/build check (without dependency resolution),
-README internal-link checks, and ignore-rule checks.
+## 7. GitHub About metadata
 
-## 7. Secret and privacy scan
+The live repository API still reports:
+- Description: empty (`null`).
+- Topics: empty (`[]`).
+- Visibility: public.
+- Default branch: `main`.
 
-The complete prepared repository tree was scanned for common credential
-patterns and restricted-file indicators. The scan found no high-confidence
-credential-pattern matches and no restricted evidence filenames. The remote
-file tree was checked after publication: no research-evidence ZIP, raw
-benchmark dataset, unblinding key, human-review mapping, private recovery
-archive, `.env`, private key, or credential file is present.
+The connected GitHub actions in this environment provide repository reads and file/commit operations but no About-settings write operation. The description/topics therefore remain **not applied**.
 
-This is a pattern and file-tree scan, not a guarantee that every conceivable
-secret or sensitive value is detectable. Do not commit credentials or private
-research material in future changes.
+Recommended description:
 
-## 8. Third-party licensing
+> Research software for evaluating conversational memory strategies under resource constraints.
 
-The vendored LongMemEval reference files were compared with the upstream
-`xiaowu0162/LongMemEval` GitHub source. Git blob identifiers for
-`run_generation.py`, `evaluate_qa.py`, `print_qa_metrics.py`, and the
-upstream MIT `LICENSE` matched the inspected upstream versions. The complete
-MIT notice and Di Wu copyright statement remain under
-`third_party/longmemeval_official/LICENSE`, with attribution in
-`THIRD_PARTY_NOTICES.md`.
+Recommended topics:
 
-The LongMemEval upstream code license does not establish a project-wide
-license for NOVA-Mem. A root-level NOVA-Mem license is withheld pending
-confirmation of copyright ownership and redistribution authority.
+`artificial-intelligence`, `llm`, `conversational-memory`, `long-term-memory`, `retrieval-augmented-generation`, `longmemeval`, `research-software`, `python`.
 
-## 9–10. GitHub URL, default branch and commit
+The repository owner must enter these values in GitHub's About settings.
 
-- Repository URL: https://github.com/zafaraieng/nova-mem
-- Visibility: public
-- Default branch: `main`
-- Source-tree commit:
-  `ba923ed0994a4ba0dd15e2d0d727e8646f186ab2`
-- Initial README commit:
-  `eb85687a70295b3aa6f2be491f2829b23c77b07e`
+## 8. Project-level licensing
 
-The target repository was confirmed empty before the first commit. The source
-tree was added as a fast-forward update; no force-push or overwrite of prior
-remote history occurred. The README, workflow, CFF, project metadata,
-research-status document and complete recursive tree were fetched back from
-GitHub after publication.
+No root-level `LICENSE` was added. GitHub reports `license: null`, and the root `LICENSE` path returns 404. `CITATION.cff` and `pyproject.toml` contain no NOVA-Mem project-license declaration.
 
-## 11. Publication status
+The visible Git history is not sufficient to establish ownership of every original project file or the authority to license it. The owner must confirm file provenance, any external/institutional contributions or assignments, and the license they intend to grant. Until then, no project-wide reuse or redistribution permission is asserted.
 
-**PARTIAL** — the audited source tree and public documentation are on GitHub,
-but a clean dependency installation and successful complete test run have not
-been established, hosted CI was still running at report time, and the
-repository-wide project license remains unresolved.
+The LongMemEval MIT notice and upstream license remain unchanged and limited to the attributed third-party material.
 
-## 12. Remaining tasks
+## 9. Privacy and research-integrity verification
 
-1. Confirm the NOVA-Mem copyright holder and the permission/license terms
-   intended for project-owned code; only then add an authorized root
-   `LICENSE` and matching metadata.
-2. Resolve package-index access, install the declared dependencies including
-   `rank-bm25`, and rerun the complete test suite. Review all failures if any
-   remain.
-3. Confirm the follow-up GitHub Actions run for the report commit completes
-   successfully; investigate any installation or test failures.
-4. Obtain the missing S-36 checkpoint/delivery/discrepancy records if a fuller
-   provenance reconciliation is required. They were not available to this
-   audit.
-5. Continue experiments and human review only under their approved research
-   protocol. C-Dense remains partial and unjudged; C-Hybrid, C-RRF,
-   D-BM25 rerank, E-v2 remain not started; E-v1 remains a one-example pilot;
-   human review remains 0/144; Test-400 remains locked at 2/11 gate criteria.
+The remote recursive Git tree was inspected after the documentation/workflow changes. It contained 84 blobs (107 tree entries including directories), and the tree response was not truncated. Filename/path scanning found no:
 
-No claim is made that NOVA-Mem is a completed scientific study, that the
-ZAI-backed results are comparable to the frozen Ollama/Qwen protocol, or that
-human review has been completed.
+- research-evidence ZIP or raw LongMemEval JSON dataset;
+- unblinding key or private human-review mapping;
+- internal recovery archive;
+- `.env`, credentials, token, PEM/private key, or model cache.
+
+No research experiment was launched. The S-36 condition counts, ZAI backend deviation, non-comparability warning, human-review count, and Test-400 gate state are preserved.
+
+## 10. Files changed
+
+| File | Change |
+|---|---|
+| `README.md` | Repositioned as professional research software documentation; added 13 sections, architecture, methodologies, available implementations, findings, status snapshot, roadmap, limits, citation and license note. |
+| `docs/RESEARCH_STATUS.md` | Neutral S-36 snapshot framing; preserved every count, accuracy value, backend caveat, and software-test distinction. |
+| `docs/RESEARCH_ROADMAP.md` | New document separating code capabilities, conducted experiments, future experiment work, and validation gates. |
+| `CITATION.cff` | Updated project title, keywords, citation guidance and abstract; no invented authors or license. |
+| `.github/workflows/tests.yml` | Restored and retained v7.0.1/v7.1.0 actions, read-only permission, and report-only path exclusions. |
+| `GITHUB_PUBLICATION_REPORT.md` | This audit update. |
+| `THIRD_PARTY_NOTICES.md` and upstream MIT `LICENSE` | Inspected; unchanged. |
+| `pyproject.toml` | Inspected; unchanged and has no project license field. |
+| Root `LICENSE` | Remains absent pending the owner's decision and rights confirmation. |
+
+No source modules, tests, experiment data, ledgers, frozen configurations, or historical evidence were modified or deleted in this presentation pass.
+
+## 11. Final state and remaining owner actions
+
+The latest code/workflow commit verified by run #7 is:
+
+`3d299866808f7a294cba5468a9e94589a81da375`
+
+The publication report itself is updated on `main` after run #7; report-only commits are excluded from CI triggers by the workflow.
+
+**Completed:** professional README and research-document structure, S-36 status preservation, research roadmap, citation metadata refinement, Node 24-compatible CI, seven successful hosted workflow runs, final remote privacy scan, and link validation.
+
+**Still requiring owner action:**
+1. Set the GitHub About description and eight recommended topics manually.
+2. Confirm copyright ownership/contributor permissions and select the actual project license before adding a root `LICENSE`.
+3. Acquire the authorized benchmark files locally when the five dataset-gated tests need to be exercised.
+
+**Final assessment: PARTIAL.** The public repository's technical presentation and hosted software CI are verified. GitHub About metadata and project-level licensing remain unresolved. The research status remains exactly as recorded at S-36; this presentation work does not claim scientific completion, backend comparability, or completed human review.
