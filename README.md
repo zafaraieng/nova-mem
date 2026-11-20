@@ -1,55 +1,141 @@
-# NOVA-Mem
+# NOVA-Mem — A Resource-Aware Evaluation Framework for Conversational Memory Strategies
 
-**Research software for resource-aware evaluation of conversational-memory
-strategies on the cleaned LongMemEval benchmark.**
+[![Tests](https://github.com/zafaraieng/nova-mem/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/zafaraieng/nova-mem/actions/workflows/tests.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 
-> **Research status: INCOMPLETE.** S-36 scored dev-100 results are A baseline
-> 0.04 (100/100 judged), Oracle 0.76 (100/100), and C-BM25 0.33 (100/100).
-> C-Dense is 6/100 generated and unjudged; C-Hybrid, C-RRF, D-BM25 rerank and
-> E-v2 have not started; E-v1 is a one-example cold pilot. Human review is
-> 0/144 and Test-400 is LOCKED (2/11 gate criteria met). **All scored dev-100
-> results used ZAI glm-4-plus, not the frozen Ollama/Qwen backend; they are not
-> comparable to that protocol.** See
-> [docs/RESEARCH_STATUS.md](docs/RESEARCH_STATUS.md) before citing any result.
+NOVA-Mem is a research software project investigating conversational memory
+strategies under resource constraints. It provides an experimental framework,
+evaluation pipelines, retrieval implementations, configuration management,
+and reproducibility documentation built around the cleaned LongMemEval
+benchmark.
 
-NOVA-Mem explores how an assistant can use long conversation histories:
-without memory, with full context, with retrieved evidence, or with a
-structured memory store. The repository contains the software pipeline,
-configuration templates, tests, and public provenance notes. It does not
-distribute benchmark data or non-public research artifacts.
+The software is organized to make memory-system choices, model backends,
+retrieval settings, evaluation outputs, and experiment provenance explicit.
+Its research snapshot and protocol deviations are documented separately from
+the framework implementation.
 
-## Scope and research motivation
+## 1. Overview
 
-The project investigates the engineering and evaluation requirements for
-memory strategies under constrained compute budgets. Its present public
-value is the implementation and its explicit record of incomplete and
-backend-deviant research—not a completed scientific comparison or a claim of
-state-of-the-art performance.
+Long conversations create a practical systems challenge: an assistant must
+identify useful information from a growing history while balancing answer
+quality, inference cost, storage, and retrieval latency. NOVA-Mem provides a
+common software framework for examining several memory and context strategies
+under a configurable evaluation pipeline.
 
-## Architecture
+The repository includes:
+
+- A Python `src/` package for dataset handling, memory systems, model clients,
+  retrieval, reranking, evaluation, metrics, caching, and experiment analysis.
+- Reusable YAML profiles for local development, evaluation, frozen settings,
+  and a separately identified ZAI continuation backend.
+- Scripts for dataset preparation, experiment execution, retrieval evaluation,
+  smoke checks, result aggregation, and report generation.
+- Unit and regression tests, prompt-parity checks against attributed upstream
+  LongMemEval code, and a GitHub Actions test workflow.
+- Dataset checksums, provenance notes, research-status documentation, and a
+  reproducibility guide.
+
+## 2. Research motivation
+
+Conversational memory is not a single retrieval operation. Systems can retain
+all context, retrieve evidence when answering, rerank candidate memories, or
+maintain structured facts across sessions. Each design introduces different
+trade-offs in computation, storage, latency, context length, and the handling
+of changing information.
+
+NOVA-Mem is designed to make these choices measurable and inspectable. The
+project emphasizes explicit configurations, consistent data handling,
+traceable retrieval outputs, backend identification, and clear separation
+between software verification and scientific findings.
+
+## 3. Research objectives
+
+The framework supports investigation of:
+
+1. **Context and memory strategies:** compare no-memory, full-context,
+   evidence-only, retrieval-augmented, reranked, and structured-memory paths.
+2. **Retrieval design:** examine lexical, dense, and fused candidate retrieval
+   at session granularity.
+3. **Resource use:** record generation, retrieval, reranking, caching, token,
+   runtime, and structured-storage measurements where available.
+4. **Evaluation discipline:** use explicit splits, dataset fingerprints,
+   judge prompts, per-question records, and reproducible configuration files.
+5. **Research provenance:** identify model backends, deviations, data sources,
+   and the status of each condition rather than treating configured code as
+   completed experimental evidence.
+
+## 4. Framework architecture
 
 ```text
 src/nova_mem/
-  data/        LongMemEval loading, splitting, statistics and fingerprints
-  models/      inference clients, generation cache and ZAI backend adapter
-  memory/      memory-system implementations and prompt registry
-  retrieval/   BM25, dense and hybrid retrieval implementations
-  reranking/   cross-encoder reranking adapters
-  evaluation/  answer judging and QA metrics
-  metrics/     retrieval and evaluation metrics
-  analysis/    experiment-ledger aggregation and statistics
-  utils/       shared utilities
-scripts/       dataset preparation, experiment execution, validation and reports
-configs/       experiment and backend configuration templates
-prompts/       prompt registry documentation
-third_party/   MIT-licensed LongMemEval upstream reference scripts
-tests/         offline unit and regression tests
+  data/         LongMemEval loading, question/session models, splits and fingerprints
+  models/       inference clients, backend adapters and generation cache
+  memory/       memory-system interfaces, prompts and structured memory
+  retrieval/    BM25, dense, hybrid and reciprocal-rank fusion
+  reranking/    cross-encoder reranking adapters
+  evaluation/   answer judging and QA evaluation
+  metrics/      retrieval metrics and aggregation
+  analysis/     experiment ledger, paired statistics and summaries
+  utils/        shared utilities
+
+configs/        local, evaluation, frozen and backend-specific YAML profiles
+scripts/        data preparation, experiments, retrieval evaluation and reports
+tests/          unit, regression, integration and prompt-parity checks
+third_party/    attributed LongMemEval upstream reference code
+docs/           architecture, provenance, research status and reproducibility
 ```
 
-The existence of code paths for a condition does not mean that the
-corresponding experiment has been run. See the research-status table above.
+The package separates dataset and model interfaces from memory strategies and
+retrieval components. Experiment scripts assemble these components from YAML
+configuration and record run metadata in the experiment ledger. See
+[Framework Architecture](docs/ARCHITECTURE.md) for component responsibilities.
 
-## Installation
+## 5. Experimental methodology
+
+The repository's evaluation pipeline is built around cleaned LongMemEval
+inputs and explicit local/evaluation configuration profiles.
+
+- **Data preparation:** retrieve the selected upstream benchmark files,
+  validate SHA-256 checksums, load question/session records, and use the
+  configured dev/test split.
+- **Configuration:** keep retrieval parameters, generation settings, reader
+  models, judge settings, prompt version, and backend selection in YAML.
+  Frozen configuration files are versioned rather than silently edited.
+- **Execution:** run the selected memory system over the requested split and
+  persist answers, retrieval traces, timing/token information, and ledger
+  metadata.
+- **Evaluation:** compute answer and retrieval metrics, with analysis utilities
+  for paired bootstrap summaries, exact McNemar tests, and Holm adjustment
+  where compatible per-question runs are available.
+- **Reproducibility:** retain data fingerprints and run metadata, distinguish
+  mock plumbing checks from real model runs, and document configuration
+  deviations alongside the measurements.
+
+The existence of an implementation or configuration does not by itself mean
+that its experiment has been executed. Current evidence is summarized in
+[Research Status](docs/RESEARCH_STATUS.md).
+
+## 6. Implemented memory strategies
+
+The codebase contains the following strategy paths:
+
+| Strategy | Software implementation |
+|---|---|
+| A — No memory | Question-only answer path |
+| B — Full context | Date-ordered conversation history with configurable session/context limits |
+| Oracle | Evidence-only context reference |
+| C — Retrieval augmented | Session retrieval with BM25 or dense embeddings |
+| C — Hybrid fusion | Equal-weight min-max score fusion of BM25 and dense candidates |
+| C — Reciprocal rank fusion | Rank-based BM25/dense fusion |
+| D — Retrieval plus reranking | Candidate retrieval followed by cross-encoder reranking |
+| E — Structured memory | Fact extraction, evidence-linked structured storage, and supersession handling |
+
+Real dense and reranking runs require the configured model dependencies and
+model weights. Deterministic/hash embedders and mock readers/rerankers are
+provided for software tests and plumbing checks; their outputs are not
+scientific results.
+
+## 7. Installation and usage
 
 Python 3.10 or newer is required.
 
@@ -61,112 +147,149 @@ python -m pip install -r requirements.txt -r requirements-dev.txt
 python -m pip install -e .
 ```
 
-The declared dependencies include `rank-bm25`, which is required by the BM25
-retrieval path. Dense retrieval, reranking, and structured-memory components
-may download Sentence Transformers/PyTorch model weights when used. See
-[docs/reproducibility.md](docs/reproducibility.md) and
-[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+On Windows, activate the environment with
+`.venv\\Scripts\\activate`.
 
-## Data acquisition
+Run the offline suite:
 
-The raw cleaned LongMemEval benchmark is **not redistributed** here. Obtain it
-from the upstream
-[LongMemEval cleaned dataset](https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned)
-and run:
+```bash
+python -m pytest tests/
+```
+
+Run a mock plumbing check in a disposable working copy:
+
+```bash
+python scripts/run_smoke_test.py
+```
+
+Run a small mock experiment (software plumbing only, not research evidence):
+
+```bash
+python scripts/run_experiment.py --system A --split dev --limit 3 --backend mock
+```
+
+Prepare locally obtained benchmark data and inspect script options:
 
 ```bash
 python scripts/prepare_data.py
+python scripts/run_experiment.py --help
+python scripts/eval_retrieval.py --help
 ```
 
-The script downloads the selected dataset files, verifies checksums, and
-creates the local dev/test split. Downloaded data, splits, caches, and run
-outputs are local artifacts excluded by `.gitignore`. See
-[docs/data_provenance.md](docs/data_provenance.md).
+The BM25 path requires `rank-bm25`, which is included in
+`requirements.txt`. Dense retrieval and cross-encoder reranking use
+Sentence Transformers and may download model weights when first invoked.
 
-## Usage
+## 8. Dataset and evaluation
 
-```bash
-# Offline tests
-python -m pytest tests/
+NOVA-Mem uses the cleaned LongMemEval benchmark. Dataset JSON files are not
+redistributed in this repository. Obtain them from the
+[LongMemEval cleaned dataset](https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned)
+and review the upstream dataset terms before use.
 
-# Mock plumbing smoke test (use a disposable working copy)
-python scripts/run_smoke_test.py
+The repository keeps checksum references under `data-templates/` and the
+data-preparation procedure in `scripts/prepare_data.py`. Downloaded data,
+derived splits, caches, model assets, and experiment outputs remain local.
+See [Dataset Provenance](docs/data_provenance.md).
 
-# Small mock experiment (does not produce scientific evidence)
-python scripts/run_experiment.py --system A --split dev --limit 3 --backend mock
+The test workflow deliberately does not download the dataset. Dataset-gated
+tests therefore skip when the required local benchmark files are absent.
 
-# Aggregate locally generated experiment ledger entries
-python scripts/aggregate_results.py
-```
+## 9. Experimental findings
 
-Real experiments require downloaded benchmark files and a configured model
-backend. The Ollama configuration is in `configs/models.yaml`. The separate
-ZAI continuation config records the `glm-4-plus` backend deviation; the
-local ZAI bridge process is not included in this source release. Never commit
-API keys or credentials.
+The S-36 snapshot contains three scored dev-100 conditions:
 
-## Research status and limitations
+| Condition | Judged | Local-judge accuracy |
+|---|---:|---:|
+| A baseline | 100/100 | 0.04 |
+| Oracle aligned | 100/100 | 0.76 |
+| C-BM25 | 100/100 | 0.33 |
 
-The research campaign is incomplete. Only A, Oracle, and C-BM25 have 100/100
-scored dev-100 results, all on the ZAI glm-4-plus backend. C-Dense is partial
-and unjudged; C-Hybrid, C-RRF, D-BM25 rerank, and E-v2 were not started; E-v1
-is only a one-example pilot. Human review is 0/144. Test-400 remains locked at
-2/11 gate criteria. The backend deviation means these scores are not the
-frozen Ollama/Qwen protocol and are not comparable to it. No claim of a
-completed scientific study, causal superiority, or human-reviewed accuracy
-is made.
+**Protocol note:** the scored dev-100 A, Oracle, and C-BM25 runs used the
+ZAI `glm-4-plus` backend rather than the frozen Ollama/Qwen configuration.
+These measurements are not results of the frozen Ollama/Qwen protocol and
+must not be described as directly comparable to it. The partial C-Dense
+continuation also used the ZAI backend.
 
-Other practical limitations include external dataset downloads, external
-model weights for dense/reranking paths, and a ZAI bridge process that is not
-bundled. The public source release excludes research-evidence archives and
-restricted materials.
+See [docs/RESEARCH_STATUS.md](docs/RESEARCH_STATUS.md) for the full condition
+table, generated/judged counts, and validation state.
 
-## Tests
+## 10. Current research snapshot
 
-Run the offline suite with `python -m pytest tests/` after installing the
-declared dependencies. The CI workflow in `.github/workflows/tests.yml`
-performs the same dependency installation and test invocation. Do not treat
-unit-test success as evidence that the scientific experiments are complete.
+The S-36 snapshot records the following additional execution and validation
+state:
 
-## Attribution and disclosure
+- C-Dense: 6/100 generated, 0 judged.
+- C-Hybrid, C-RRF, and D-BM25 rerank: not started at this snapshot.
+- E-v1: one-example cold pilot, 1/1 judged.
+- E-v2: not started.
+- Human review: 0/144 labeled.
+- Test-400: locked, with 2/11 gate criteria met.
 
-The vendored LongMemEval scripts and copied prompt-template content are
-attributed under the upstream MIT license in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The benchmark authors and
-upstream project are not affiliated with or endorsing NOVA-Mem.
+These are time-bounded research-status records, not statements about whether
+corresponding software modules exist. The status page preserves the complete
+snapshot and the backend caveat.
 
-AI tools assisted parts of software development and documentation. This
-assistance is disclosed for provenance and does not constitute experimental
-evidence or scientific validation.
+## 11. Research roadmap
 
-No current manuscript is included. The available historical draft was
-excluded because it predates the S-36 status and is not publication-ready;
-see [paper/README.md](paper/README.md).
+The roadmap distinguishes the available software from experimental execution
+and validation activity. It does not assign dates or imply unrecorded progress.
 
-## Citation
+| Area | Current position | Research/validation activity |
+|---|---|---|
+| Software framework | A/B/Oracle, RAG, fusion, reranking and structured-memory code paths are present | Maintain tests, configuration provenance and backend adapters |
+| Scored conditions | A, Oracle and C-BM25 have 100/100 judged S-36 records | Preserve the ZAI backend deviation; any frozen-protocol comparison requires runs under the frozen Ollama/Qwen configuration |
+| Dense retrieval | C-Dense has 6/100 generated, 0 judged | Complete generation and judging under an explicitly recorded protocol |
+| Additional retrieval/reranking | C-Hybrid, C-RRF and D-BM25 rerank had not started at S-36 | Execute and evaluate only under the approved experiment protocol |
+| Structured memory | E-v1 is a one-example pilot; E-v2 had not started | Further implementation-level and experimental validation is required |
+| Human validation | 0/144 labels completed at S-36 | Complete the approved human-review process and report agreement/limitations |
+| Held-out evaluation | Test-400 locked; 2/11 gate criteria met | Satisfy the gate criteria before any test-set evaluation |
 
-See [CITATION.cff](CITATION.cff). Individual author identifiers and a DOI
-are not supplied because they have not been verified. Cite the LongMemEval
-benchmark separately when using that benchmark.
+See [Research Roadmap](docs/RESEARCH_ROADMAP.md) for the detailed separation
+of implemented capabilities, conducted experiments, and remaining validation.
 
-## Project licensing and ownership
+## 12. Limitations and reproducibility
 
-No repository-wide license is granted for NOVA-Mem project code in this
-release. A root-level `LICENSE` is intentionally absent: copyright ownership,
-the authority to grant reuse permissions, and any third-party contributions
-to the original project code have not been independently established.
+- The S-36 scored dev-100 conditions used the ZAI `glm-4-plus` backend,
+  not the frozen Ollama/Qwen configuration; no cross-backend comparability is
+  claimed.
+- C-Dense and the remaining conditions have the execution state reported
+  above. Human review and held-out Test-400 validation remain gated.
+- Benchmark files are obtained separately and are not included in this
+  repository. External model weights and model-serving backends may be needed
+  for real dense, reranking, and generation runs.
+- The ZAI bridge process is not bundled. Never commit API keys or credentials.
+- Hosted CI verifies software tests only. It does not complete experiments,
+  establish scientific conclusions, or substitute for human review.
 
-The visible Git commits are attributed to the repository owner's GitHub
-account. That records the committer/author identity
-in Git metadata; it does **not** prove sole copyright ownership, establish
-employment or contract IP rights, or rule out contributions made outside the
-visible history. Before selecting a project license, the owner should confirm
-the provenance of all project-owned files, contributor permissions, and any
-applicable institutional or contractual obligations.
+Use [Research Status](docs/RESEARCH_STATUS.md),
+[Research Roadmap](docs/RESEARCH_ROADMAP.md), and the
+[Reproducibility Guide](docs/reproducibility.md) when reproducing or citing
+specific findings.
 
-Until that review is completed, do not assume that public availability grants
-permission to reuse, modify, or redistribute NOVA-Mem project code. The
-LongMemEval MIT license applies only to the separately attributed upstream
-reference material; it does not license the rest of this repository. See
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
-`third_party/longmemeval_official/LICENSE`.
+## 13. Citation and acknowledgements
+
+See [CITATION.cff](CITATION.cff) for software citation metadata. Cite the
+LongMemEval benchmark and upstream work separately when using that benchmark.
+No author identifiers, DOI, or publication venue are asserted here because
+they have not been verified.
+
+The vendored LongMemEval reference scripts and copied prompt-template
+material are attributed under the upstream MIT license in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). That upstream license does
+not grant a project-wide license for NOVA-Mem code.
+
+AI tools assisted parts of software development and documentation. This is
+disclosed for provenance and does not constitute experimental evidence,
+scientific validation, or authorship attribution.
+
+### Project licensing
+
+No repository-wide license is currently granted for NOVA-Mem project code.
+The root-level `LICENSE` remains absent because project ownership,
+redistribution authority, and any third-party contributions or assignments
+have not been independently established. Public Git history alone does not
+prove copyright ownership. Do not assume that public visibility grants reuse
+or redistribution rights. See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the separately licensed
+upstream LongMemEval material.

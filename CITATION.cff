@@ -1,20 +1,27 @@
 cff-version: 1.2.0
 message: >-
-  Please cite the software repository and consult docs/RESEARCH_STATUS.md
-  before citing any experimental result. The research campaign is incomplete
-  and the reported dev-100 continuation results used a non-frozen backend.
-title: NOVA-Mem
+  Please cite the NOVA-Mem software repository and consult
+  docs/RESEARCH_STATUS.md for the S-36 experiment snapshot, including its
+  documented ZAI glm-4-plus backend deviation from the frozen Ollama/Qwen
+  configuration.
+title: >-
+  NOVA-Mem: A Resource-Aware Evaluation Framework for Conversational Memory Strategies
 type: software
 repository-code: "https://github.com/zafaraieng/nova-mem"
 version: 0.1.0
 date-released: "2026-11-20"
 keywords:
+  - artificial-intelligence
   - conversational-memory
   - long-term-memory
   - retrieval-augmented-generation
-  - benchmark
   - LongMemEval
+  - research-software
+  - python
 abstract: >-
-  Development-stage software for examining resource-aware conversational
-  memory and retrieval strategies on the cleaned LongMemEval benchmark.
-  Experimental status and backend deviations are documented in the repository.
+  Research software for evaluating conversational memory and retrieval
+  strategies under resource constraints using the cleaned LongMemEval
+  benchmark. The repository includes configurable memory-system paths,
+  model adapters, retrieval and reranking components, evaluation utilities,
+  experiment tracking, tests, and reproducibility documentation. Research
+  status and backend deviations are documented separately.
