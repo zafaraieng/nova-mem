@@ -156,8 +156,8 @@ release. A root-level `LICENSE` is intentionally absent: copyright ownership,
 the authority to grant reuse permissions, and any third-party contributions
 to the original project code have not been independently established.
 
-The public Git history currently attributes the four recorded commits to the
-repository owner's GitHub account. That records the committer/author identity
+The visible Git commits are attributed to the repository owner's GitHub
+account. That records the committer/author identity
 in Git metadata; it does **not** prove sole copyright ownership, establish
 employment or contract IP rights, or rule out contributions made outside the
 visible history. Before selecting a project license, the owner should confirm
