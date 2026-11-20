@@ -1,0 +1,38 @@
+# Model registry — ZAI sandbox continuation (glm-4-plus cloud backend).
+# Selected via env NOVA_MODELS=models_zai when launching run_experiment.py.
+# Every resulting ledger row carries deviation
+# 'modified-config: zai-glm4-plus-backend' and is analyzed separately from
+# the historical Qwen2.5-7B/Llama3.2-3B Ollama runs. Digests are not pinned:
+# the served model is a managed cloud endpoint; model identity is recorded
+# per call from the response (request_id + model fields).
+readers:
+  primary:
+    backend: zai
+    model_id: glm-4-plus
+    note: "sandbox continuation reader — NOT the paper's Qwen2.5-7B anchor"
+  secondary:
+    backend: zai
+    model_id: glm-4-plus
+    note: "sandbox continuation secondary reader"
+  full_context:
+    backend: zai
+    model_id: glm-4-plus
+    note: "sandbox continuation full-context reader"
+extractor:
+  backend: zai
+  model_id: glm-4-plus
+  note: "sandbox continuation extractor — NOT the paper's Llama3.2-3B anchor"
+embedder:
+  name: BAAI/bge-small-en-v1.5
+  dim: 384
+reranker:
+  primary: cross-encoder/ms-marco-MiniLM-L-6-v2
+  secondary: BAAI/bge-reranker-base
+judge:
+  local:
+    backend: zai
+    model_id: glm-4-plus
+    note: "sandbox continuation judge — same reader model, official prompts"
+  official:
+    backend: openai-compat
+    model_id: gpt-4o-2024-08-06

@@ -1,0 +1,53 @@
+# Profile 1 — local development (HP EliteBook 840 G6, 16 GB RAM, CPU-only)
+profile: local
+data:
+  benchmark_file: longmemeval_s_cleaned.json
+  oracle_file: longmemeval_oracle.json
+  oracle_aligned_file: derived/longmemeval_oracle_s_aligned_v1.json
+  split_file: splits/dev_test_v0.json
+  dev_size: 100
+retrieval:
+  system_C:
+    retriever: bm25            # lexical arm first (CPU-cheapest); dense in evaluation.yaml
+    granularity: session
+    top_k: 5
+    user_only_index: true
+    user_only_value: false
+    con: true                  # official recommended reading
+  system_C_dense:
+    retriever: dense
+    top_k: 5
+    granularity: session
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_C_hybrid:
+    retriever: hybrid
+    candidate_pool_size: 25
+    top_k: 5
+    granularity: session
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_C_rrf:
+    retriever: rrf
+    candidate_pool_size: 25
+    rrf_k: 60
+    top_k: 5
+    granularity: session
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_D:
+    retriever: bm25
+    top_n: 25
+    top_k_final: 5             # k-matched; token-matched arm configured in frozen_v1
+    granularity: session
+    con: true
+generation:
+  max_tokens: 500              # official default (no CoT)
+  temperature: 0.0
+  seed: 0
+cache:
+  enabled: true
+  root: results/cache

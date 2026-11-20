@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: >-
+  Please cite the software repository and consult docs/RESEARCH_STATUS.md
+  before citing any experimental result. The research campaign is incomplete
+  and the reported dev-100 continuation results used a non-frozen backend.
+title: NOVA-Mem
+type: software
+repository-code: "https://github.com/zafaraieng/nova-mem"
+version: 0.1.0
+date-released: "2026-11-20"
+keywords:
+  - conversational-memory
+  - long-term-memory
+  - retrieval-augmented-generation
+  - benchmark
+  - LongMemEval
+abstract: >-
+  Development-stage software for examining resource-aware conversational
+  memory and retrieval strategies on the cleaned LongMemEval benchmark.
+  Experimental status and backend deviations are documented in the repository.

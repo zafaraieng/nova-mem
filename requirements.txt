@@ -1,0 +1,16 @@
+# NOVA-Mem runtime dependencies (CPU-only by design)
+numpy>=1.26
+pandas>=2.1
+scikit-learn>=1.3
+matplotlib>=3.8
+pyyaml>=6.0
+tqdm>=4.66
+requests>=2.31
+rank-bm25>=0.2.2
+
+# Embedding + reranking models (lazy-imported; needed for real runs of C/D/E)
+# torch installed CPU-only: pip install torch --index-url https://download.pytorch.org/whl/cpu
+sentence-transformers>=2.7
+
+# Optional FAISS (numpy flat-IP fallback is used when absent)
+# faiss-cpu>=1.8

@@ -1,0 +1,43 @@
+# Python build and test artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Root-level downloaded benchmark data, model assets, experiment outputs.
+# Anchor paths so Python packages src/nova_mem/data and src/nova_mem/models
+# remain version-controlled.
+/data/
+/models/
+/results/
+/runs/
+/cache/
+*.pt
+*.bin
+*.faiss
+*.sqlite
+*.sqlite3
+
+# Local credentials and private key material
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.token
+*_credentials*
+secrets*
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+*.swp

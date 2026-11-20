@@ -1,0 +1,31 @@
+# Profile 2 — research evaluation (full runs; same pinned models)
+profile: evaluation
+data:
+  benchmark_file: longmemeval_s_cleaned.json
+  oracle_file: longmemeval_oracle.json
+  split_file: splits/dev_test_v0.json
+  dev_size: 100
+retrieval:
+  system_C:
+    retriever: dense           # BAAI/bge-small-en-v1.5 (primary, per plan D3)
+    granularity: session
+    top_k: 5
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_D:
+    retriever: dense
+    top_n: 25
+    top_k_final: 5
+    granularity: session
+    con: true
+generation:
+  max_tokens: 500
+  temperature: 0.0
+  seed: 0
+judge:
+  default: local               # validated local judge; agreement reported
+  official_for_headline: false # flip to true (with OPENAI_API_KEY set) per plan D6-A
+cache:
+  enabled: true
+  root: results/cache

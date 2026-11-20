@@ -1,0 +1,42 @@
+# Model registry — tags, manifest digests, and quantization recorded per run.
+# Ollama 0.40.12 does not support `ollama list --digests`; digests below are
+# recorded from local manifests, while model_id remains the tag used by the client.
+readers:
+  primary:
+    backend: ollama
+    model_id: qwen2.5:7b-instruct-q4_K_M
+    digest: sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e
+    quantization: Q4_K_M
+    note: "paper Table-8 anchor; G1 oracle check (0.90) passed, see docs/decisions.md S-6"
+  secondary:
+    backend: ollama
+    model_id: llama3.2:3b-instruct-q4_K_M
+    digest: sha256:a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72
+    num_ctx: 16384  # bounds KV-cache RAM use on the 16 GB CPU laptop
+    quantization: Q4_K_M
+    note: "paper Table-8 anchor: Llama-3.2-3B"
+  full_context:  # Profile 2 only
+    backend: ollama
+    model_id: llama3.1:8b-instruct-q4_K_M
+    quantization: Q4_K_M
+    note: "paper Fig-3b anchor: Llama-3.1-8B oracle 0.710 / full-S 0.454"
+extractor:  # system E offline pass (architecture component, not the answer reader)
+  backend: ollama
+  model_id: llama3.2:3b-instruct-q4_K_M
+  digest: sha256:a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72
+  num_ctx: 16384  # same 3B model and laptop memory limit
+  quantization: Q4_K_M
+embedder:
+  name: BAAI/bge-small-en-v1.5
+  dim: 384
+reranker:
+  primary: cross-encoder/ms-marco-MiniLM-L-6-v2
+  secondary: BAAI/bge-reranker-base
+judge:
+  local:          # validated local judge (plan D6 default)
+    backend: ollama
+    model_id: qwen2.5:7b-instruct-q4_K_M
+    digest: sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e
+  official:       # optional (plan D6-A); API key via OPENAI_API_KEY env var only
+    backend: openai-compat
+    model_id: gpt-4o-2024-08-06

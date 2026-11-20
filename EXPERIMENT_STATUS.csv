@@ -1,0 +1,12 @@
+condition,generated,judged,local_judge_accuracy,status,backend_or_note
+A baseline,100/100,100/100,0.04,scored dev-100,ZAI glm-4-plus deviation
+Oracle,100/100,100/100,0.76,scored dev-100,ZAI glm-4-plus deviation
+C-BM25,100/100,100/100,0.33,scored dev-100,ZAI glm-4-plus deviation
+C-Dense,6/100,0/100,,partial and unjudged,ZAI glm-4-plus continuation
+C-Hybrid,0/100,0/100,,not started,
+C-RRF,0/100,0/100,,not started,
+D-BM25 rerank,0/100,0/100,,not started,
+E-v1,1/1,1/1,,one-example cold pilot only,
+E-v2,0/100,0/100,,not started,
+Human review,,0/144,,not completed,0 of 144 labels completed
+Test-400,,0/400,,LOCKED,2 of 11 gate criteria met

@@ -1,0 +1,58 @@
+# sandbox_zai.yaml — run configuration for the ZAI backend continuation.
+# Structural mirror of local.yaml (retrieval arms identical to frozen_v0's
+# dev-side settings); model selection happens via NOVA_MODELS=models_zai.
+# Runs launched with this config are tagged in the ledger with
+# 'modified-config: zai-glm4-plus-backend' and are NOT comparable to the
+# historical Qwen2.5-7B/Llama3.2-3B Ollama conditions.
+profile: sandbox-zai
+data:
+  benchmark_file: longmemeval_s_cleaned.json
+  oracle_file: longmemeval_oracle.json
+  oracle_aligned_file: derived/longmemeval_oracle_s_aligned_v1.json
+  split_file: splits/dev_test_v0.json
+  dev_size: 100
+retrieval:
+  system_C:
+    retriever: bm25
+    granularity: session
+    top_k: 5
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_C_dense:
+    retriever: dense
+    top_k: 5
+    granularity: session
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_C_hybrid:
+    retriever: hybrid
+    candidate_pool_size: 25
+    top_k: 5
+    granularity: session
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_C_rrf:
+    retriever: rrf
+    candidate_pool_size: 25
+    rrf_k: 60
+    top_k: 5
+    granularity: session
+    user_only_index: true
+    user_only_value: false
+    con: true
+  system_D:
+    retriever: bm25
+    top_n: 25
+    top_k_final: 5
+    granularity: session
+    con: true
+generation:
+  max_tokens: 500
+  temperature: 0.0
+  seed: 0
+cache:
+  enabled: true
+  root: results/cache_zai
