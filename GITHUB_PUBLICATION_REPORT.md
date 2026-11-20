@@ -134,9 +134,14 @@ successful clean installation.
 
 GitHub Actions run
 [44718088502](https://github.com/zafaraieng/nova-mem/actions/runs/44718088502)
-was triggered on the source-tree commit. At the time this report was written,
-the hosted job was still in the dependency-install step. No hosted CI pass is
-claimed here.
+on the source-tree commit completed successfully. GitHub reports dependency
+installation, the explicit `rank-bm25` assertion, and the full offline test
+step all succeeded. The job log records **104 passed, 5 skipped in 0.38s**.
+The skips are dataset-dependent tests because private/raw benchmark data is
+not bundled. A subsequent run
+[44718250779](https://github.com/zafaraieng/nova-mem/actions/runs/44718250779)
+was triggered by the first report commit and remained in progress at the time
+of this report update.
 
 ## 6. Actual test results
 
@@ -151,7 +156,13 @@ The complete local pytest invocation in the available interpreter reported:
 All eight failures raised `ModuleNotFoundError: rank_bm25`; that package was
 declared but absent from the provided interpreter. Five dataset-dependent
 tests skipped because benchmark data is not bundled. No tests were deleted or
-silently skipped to improve the result.
+silently skipped to improve the local result.
+
+Separately, the hosted GitHub Actions run for source commit
+`ba923ed0994a4ba0dd15e2d0d727e8646f186ab2` passed with **104 passed,
+5 skipped in 0.38s** after installing dependencies including `rank-bm25`.
+The local interpreter failures reflect its incomplete dependency state, not
+the result of that clean hosted run.
 
 Other checks completed successfully: Python source compilation, parsing of
 the six YAML configurations, script help/import checks, CFF parsing, status
@@ -216,8 +227,8 @@ repository-wide project license remains unresolved.
 2. Resolve package-index access, install the declared dependencies including
    `rank-bm25`, and rerun the complete test suite. Review all failures if any
    remain.
-3. Inspect the completed GitHub Actions run and address any installation or
-   test failures; do not describe a pending run as passing.
+3. Confirm the follow-up GitHub Actions run for the report commit completes
+   successfully; investigate any installation or test failures.
 4. Obtain the missing S-36 checkpoint/delivery/discrepancy records if a fuller
    provenance reconciliation is required. They were not available to this
    audit.
